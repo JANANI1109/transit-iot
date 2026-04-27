@@ -1,0 +1,5 @@
+fastapi==0.110.0
+uvicorn==0.29.0
+ortools==9.8.3296
+cryptography==42.0.5
+pydantic==2.6.4
