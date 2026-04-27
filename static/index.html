@@ -295,6 +295,294 @@ textarea{resize:none;height:52px;line-height:1.5;}
     <div class="modal-body" id="modal-body">Loading...</div>
   </div>
 </div>
+</script>
+<style>
+:root{--bg:#080c14;--surface:#0d1320;--surface2:#131c2e;--surface3:#1a2540;--border:#1e2d45;--border2:#243352;--cyan:#00d4ff;--violet:#8b5cf6;--green:#00e676;--amber:#ffab00;--red:#ff3d57;--text:#e8edf5;--muted:#5a6a85;--muted2:#7a8ba8;--mono:"JetBrains Mono",monospace;--sans:"Syne",sans-serif;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+header{height:50px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0;}
+.logo{display:flex;align-items:center;gap:9px;}
+.logo-badge{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--cyan),var(--violet));display:flex;align-items:center;justify-content:center;font-size:14px;}
+.logo-title{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--cyan);}
+.logo-sub{font-size:9px;color:var(--muted);}
+.hdr-right{display:flex;align-items:center;gap:7px;}
+.pill{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-family:var(--mono);font-size:9px;color:var(--muted2);}
+.pdot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green);animation:blink 2s infinite;}
+.pdot.w{background:var(--amber);box-shadow:0 0 7px var(--amber);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+#clock{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;letter-spacing:1px;}
+.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
+.sc{padding:7px 12px;border-right:1px solid var(--border);display:flex;align-items:center;gap:9px;}
+.sc:last-child{border-right:none;}
+.si{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.si.c{background:rgba(0,212,255,.12);}.si.v{background:rgba(139,92,246,.12);}.si.g{background:rgba(0,230,118,.12);}.si.a{background:rgba(255,171,0,.12);}.si.r{background:rgba(255,61,87,.12);}
+.sv{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--text);line-height:1;}
+.sl{font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px;}
+.main{display:grid;grid-template-columns:1fr 360px;flex:1;min-height:0;overflow:hidden;}
+.left-panel{display:grid;grid-template-rows:1fr 185px;min-height:0;overflow:hidden;}
+#map{width:100%;height:100%;background:#060d18;}
+.map-badge{position:absolute;top:10px;left:10px;z-index:500;background:rgba(8,12,20,.9);border:1px solid var(--border);border-radius:8px;padding:6px 12px;backdrop-filter:blur(10px);font-family:var(--mono);font-size:9px;color:var(--muted2);}
+.map-badge b{color:var(--cyan);}
+.route-overlay{position:absolute;bottom:10px;left:10px;z-index:500;background:rgba(8,12,20,.93);border:1px solid var(--border);border-radius:10px;padding:12px 14px;backdrop-filter:blur(12px);min-width:240px;display:none;}
+.ro-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.ro-id{font-family:var(--mono);font-size:13px;font-weight:700;}
+.ro-close{cursor:pointer;color:var(--muted);font-size:14px;padding:2px 4px;}
+.ro-close:hover{color:var(--red);}
+.ro-name{font-size:11px;color:var(--muted2);margin-bottom:10px;}
+.ro-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
+.ro-cell{background:var(--surface2);border-radius:6px;padding:6px 8px;text-align:center;}
+.ro-val{font-family:var(--mono);font-size:13px;font-weight:600;}
+.ro-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:2px;}
+.sim-row{display:flex;gap:6px;align-items:center;}
+.sim-input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 8px;font-family:var(--mono);font-size:10px;outline:none;}
+.sim-input:focus{border-color:var(--cyan);}
+.sim-btn{padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-family:var(--mono);font-size:9px;font-weight:700;background:linear-gradient(135deg,var(--cyan),#0080d4);color:#000;white-space:nowrap;}
+.sim-result{font-family:var(--mono);font-size:10px;margin-top:6px;color:var(--muted2);min-height:14px;}
+.demand-panel{background:var(--surface);border-top:1px solid var(--border);padding:8px 14px;display:flex;flex-direction:column;gap:5px;}
+.demand-header{display:flex;align-items:center;justify-content:space-between;}
+.sec-title{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;display:flex;align-items:center;gap:5px;}
+.sec-title::before{content:"";width:3px;height:9px;background:linear-gradient(var(--cyan),var(--violet));border-radius:2px;}
+.dl{display:flex;gap:10px;font-size:9px;color:var(--muted);}
+.ld{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:3px;vertical-align:middle;}
+.rsel{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;padding:2px 7px;font-family:var(--mono);font-size:9px;outline:none;cursor:pointer;}
+.chart-wrap{flex:1;position:relative;min-height:0;}
+#demand-svg{width:100%;height:100%;}
+.sidebar{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
+.tab{flex:1;padding:9px 4px;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--muted);text-align:center;cursor:pointer;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid transparent;transition:all .2s;user-select:none;}
+.tab:hover{color:var(--text);}.tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+.tab-content{display:none;flex:1;overflow-y:auto;}
+.tab-content.active{display:flex;flex-direction:column;}
+.tab-content::-webkit-scrollbar{width:3px;}
+.tab-content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+#tab-routes{padding:8px;gap:5px;}
+.sort-bar{display:flex;gap:5px;align-items:center;padding:2px 0;flex-shrink:0;}
+.sort-label{font-family:var(--mono);font-size:9px;color:var(--muted);}
+.sort-btn{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:4px;background:var(--surface3);border:1px solid var(--border);color:var(--muted2);cursor:pointer;transition:all .15s;}
+.sort-btn:hover,.sort-btn.active{border-color:var(--cyan);color:var(--cyan);}
+.route-card{background:var(--surface2);border:1px solid var(--border);border-left:3px solid transparent;border-radius:9px;padding:9px 11px;cursor:pointer;transition:all .2s;}
+.route-card:hover{border-color:var(--border2);transform:translateX(2px);}
+.route-card.selected{background:rgba(0,212,255,.05);border-color:var(--border2);}
+.rc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.rc-id{font-family:var(--mono);font-size:11px;font-weight:700;}
+.rc-name{font-size:10px;color:var(--muted2);margin-bottom:6px;}
+.rc-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px;}
+.rc-metric{background:var(--surface3);border-radius:5px;padding:4px 5px;text-align:center;}
+.rc-mv{font-family:var(--mono);font-size:11px;font-weight:600;line-height:1;}
+.rc-ml{font-size:8px;color:var(--muted);margin-top:2px;text-transform:uppercase;}
+.load-bar{height:3px;background:var(--surface3);border-radius:2px;overflow:hidden;}
+.load-fill{height:100%;border-radius:2px;transition:width .6s;}
+.badge{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;}
+.b-ok{background:rgba(0,230,118,.12);color:var(--green);}.b-med{background:rgba(255,171,0,.12);color:var(--amber);}.b-hi{background:rgba(255,61,87,.12);color:var(--red);}
+.rc-actions{display:flex;gap:5px;margin-top:7px;}
+.rc-act{flex:1;padding:4px 0;border-radius:5px;border:none;cursor:pointer;font-family:var(--mono);font-size:8px;font-weight:700;text-transform:uppercase;transition:all .15s;text-align:center;}
+.rc-act.focus{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--cyan);}
+.rc-act.sim{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);color:var(--violet);}
+.rc-act.sched{background:rgba(255,171,0,.1);border:1px solid rgba(255,171,0,.3);color:var(--amber);}
+#tab-eda{padding:8px;gap:7px;}
+.eda-box{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px;}
+.tl-label{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+.tl-track{position:relative;height:24px;background:var(--surface3);border-radius:6px;overflow:hidden;margin-bottom:4px;}
+.peak-seg{position:absolute;top:0;height:100%;background:rgba(255,171,0,.18);border-left:1px solid rgba(255,171,0,.35);}
+.tl-cursor{position:absolute;top:0;height:100%;width:2px;background:var(--red);box-shadow:0 0 6px var(--red);z-index:2;transition:left .5s;}
+.tl-cursor::after{content:"";position:absolute;top:-3px;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--red);}
+.tl-dot{position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;transform:translateX(-50%);}
+.tl-hours{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--muted);}
+.eda-mini-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
+.eda-mini{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 9px;text-align:center;}
+.emv{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--cyan);}
+.eml{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+.feed-hdr{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;}
+.event-feed{display:flex;flex-direction:column;gap:4px;flex:1;}
+.ev{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--muted);border-radius:7px;padding:7px 9px;animation:fadeSlide .3s ease;display:flex;gap:7px;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:none}}
+.ev.add_trip{border-left-color:var(--green);}.ev.cancel_trip{border-left-color:var(--red);}.ev.notify_operator{border-left-color:var(--amber);}.ev.reroute{border-left-color:var(--cyan);}.ev.increase_capacity{border-left-color:var(--violet);}
+.ev-icon{font-size:13px;flex-shrink:0;line-height:1;}
+.ev-body{min-width:0;flex:1;}
+.ev-top{display:flex;justify-content:space-between;gap:4px;margin-bottom:1px;}
+.ev-type{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;}
+.ev-time{font-family:var(--mono);font-size:8px;color:var(--muted);white-space:nowrap;}
+.ev-detail{font-size:10px;color:var(--muted2);line-height:1.3;}
+.ev-route{font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:1px;}
+.add_trip .ev-type{color:var(--green);}.cancel_trip .ev-type{color:var(--red);}.notify_operator .ev-type{color:var(--amber);}.reroute .ev-type{color:var(--cyan);}.increase_capacity .ev-type{color:var(--violet);}
+#tab-dsl{padding:8px;gap:9px;}
+.dsl-box{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:11px;display:flex;flex-direction:column;gap:7px;}
+.chips{display:flex;flex-wrap:wrap;gap:4px;}
+.chip{font-family:var(--mono);font-size:8px;padding:3px 7px;border-radius:4px;background:var(--surface3);border:1px solid var(--border2);color:var(--muted2);cursor:pointer;transition:all .15s;}
+.chip:hover{border-color:var(--cyan);color:var(--cyan);}
+textarea,input,select{background:var(--surface3);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:7px 9px;font-family:var(--mono);font-size:9px;outline:none;transition:border .2s;width:100%;}
+textarea:focus,input:focus,select:focus{border-color:var(--cyan);}
+textarea{resize:none;height:52px;line-height:1.5;}
+.btn-row{display:flex;gap:5px;}
+.btn{padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-family:var(--mono);font-size:9px;font-weight:700;text-transform:uppercase;transition:all .15s;flex:1;}
+.btn-cyan{background:linear-gradient(135deg,var(--cyan),#0080d4);color:#000;}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted2);}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber);}
+.btn-red{background:rgba(255,61,87,.12);border:1px solid rgba(255,61,87,.3);color:var(--red);}
+.fb{font-family:var(--mono);font-size:9px;min-height:13px;}
+.ticket-out{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:9px;font-family:var(--mono);font-size:9px;color:var(--muted2);word-break:break-all;line-height:1.7;max-height:100px;overflow-y:auto;}
+.ok{color:var(--green);}.err{color:var(--red);}.key{color:var(--cyan);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;width:500px;max-height:80vh;display:flex;flex-direction:column;gap:12px;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;}
+.modal-title{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--cyan);}
+.modal-close{cursor:pointer;color:var(--muted);font-size:18px;padding:2px 6px;border-radius:4px;}
+.modal-close:hover{background:var(--surface2);color:var(--red);}
+.modal-body{overflow-y:auto;flex:1;}
+.modal-body::-webkit-scrollbar{width:3px;}
+.modal-body::-webkit-scrollbar-thumb{background:var(--border2);}
+.sched-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+.sched-stat{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 10px;text-align:center;}
+.ssv{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--cyan);}
+.ssl{font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:2px;}
+.sched-table{width:100%;border-collapse:collapse;}
+.sched-table th{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;padding:6px 10px;border-bottom:1px solid var(--border);text-align:left;}
+.sched-table td{font-family:var(--mono);font-size:10px;padding:5px 10px;border-bottom:1px solid var(--border);color:var(--muted2);}
+.sched-table tr:last-child td{border-bottom:none;}
+.sched-table tr:hover td{background:var(--surface2);}
+.leaflet-tile{filter:brightness(.6) saturate(.5) hue-rotate(200deg);}
+.leaflet-control-zoom a{background:var(--surface)!important;color:var(--text)!important;border-color:var(--border)!important;}
+.leaflet-popup-content-wrapper{background:var(--surface)!important;color:var(--text)!important;border:1px solid var(--border)!important;box-shadow:0 4px 20px rgba(0,0,0,.6)!important;font-family:var(--mono)!important;font-size:11px!important;}
+.leaflet-popup-tip{background:var(--surface)!important;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-badge">&#x1F68C;</div>
+    <div><div class="logo-title">Transit IoT &mdash; Live Ops</div><div class="logo-sub">Bengaluru &middot; EDA + DSL + OR-Tools</div></div>
+  </div>
+  <div class="hdr-right">
+    <div class="pill"><div class="pdot" id="eda-dot"></div><span id="eda-status">EDA</span></div>
+    <div class="pill"><div class="pdot w"></div><span id="rules-pill">0 Rules</span></div>
+    <div class="pill" id="sim-pill">SIM 08:00</div>
+    <div id="clock">00:00:00</div>
+  </div>
+</header>
+<div class="stats-bar">
+  <div class="sc"><div class="si c">&#x26A1;</div><div><div class="sv" id="s-events">0</div><div class="sl">Events Processed</div></div></div>
+  <div class="sc"><div class="si v">&#x1F501;</div><div><div class="sv" id="s-actions">0</div><div class="sl">Actions Fired</div></div></div>
+  <div class="sc"><div class="si g">&#x1F4E8;</div><div><div class="sv" id="s-msgs">0</div><div class="sl">Broker Messages</div></div></div>
+  <div class="sc"><div class="si a">&#x1F4CB;</div><div><div class="sv" id="s-rules">0</div><div class="sl">Active Rules</div></div></div>
+  <div class="sc"><div class="si r">&#x1F6E4;</div><div><div class="sv" id="s-routes">6</div><div class="sl">Live Routes</div></div></div>
+</div>
+<div class="main">
+  <div class="left-panel">
+    <div style="position:relative">
+      <div id="map"></div>
+      <div class="map-badge"><b id="active-count">0</b> ACTIVE ROUTES &middot; Bengaluru, IN &nbsp;|&nbsp; Click a route card or bus marker to interact</div>
+      <div class="route-overlay" id="route-overlay">
+        <div class="ro-header">
+          <span class="ro-id" id="ro-id">route_5</span>
+          <span class="ro-close" onclick="deselectRoute()">&#x2715;</span>
+        </div>
+        <div class="ro-name" id="ro-name">Hebbal &ndash; Silk Board</div>
+        <div class="ro-grid">
+          <div class="ro-cell"><div class="ro-val" id="ro-load" style="color:var(--green)">--%</div><div class="ro-lbl">Load</div></div>
+          <div class="ro-cell"><div class="ro-val" id="ro-delay">-- min</div><div class="ro-lbl">Delay</div></div>
+          <div class="ro-cell"><div class="ro-val" id="ro-pax">--</div><div class="ro-lbl">Passengers</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:5px;">&#x26A1; SIMULATE EVENT ON THIS ROUTE</div>
+        <div class="sim-row">
+          <input class="sim-input" id="sim-load" type="number" min="0" max="100" placeholder="Load %" value="85"/>
+          <input class="sim-input" id="sim-delay" type="number" min="0" max="60" placeholder="Delay min" value="6"/>
+          <button class="sim-btn" onclick="simulateRoute()">Fire &#x2192;</button>
+        </div>
+        <div class="sim-result" id="sim-result"></div>
+      </div>
+    </div>
+    <div class="demand-panel">
+      <div class="demand-header">
+        <div class="sec-title">Peak Hour Demand (24h)</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="dl">
+            <span><span class="ld" style="background:var(--cyan);opacity:.55"></span>Normal</span>
+            <span><span class="ld" style="background:var(--amber)"></span>Peak</span>
+            <span><span class="ld" style="background:var(--red);border-radius:50%"></span>Now</span>
+          </div>
+          <select class="rsel" id="demand-sel" onchange="loadDemand()">
+            <option value="route_5">route_5 &middot; Hebbal&ndash;Silk Board</option>
+            <option value="route_1">route_1 &middot; Majestic&ndash;Electronic City</option>
+            <option value="route_2">route_2 &middot; Whitefield&ndash;KR Puram</option>
+            <option value="route_3">route_3 &middot; Jayanagar&ndash;Koramangala</option>
+            <option value="route_6">route_6 &middot; Banashankari&ndash;Yeshwantpur</option>
+            <option value="route_7">route_7 &middot; Yelahanka&ndash;Devanahalli</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-wrap"><svg id="demand-svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('routes',this)">&#x1F6E4; Routes</div>
+      <div class="tab" onclick="switchTab('eda',this)">&#x26A1; EDA</div>
+      <div class="tab" onclick="switchTab('dsl',this)">&#x1F512; DSL</div>
+    </div>
+    <div class="tab-content active" id="tab-routes">
+      <div class="sort-bar">
+        <span class="sort-label">Sort:</span>
+        <span class="sort-btn active" onclick="sortBy('load',this)">Load</span>
+        <span class="sort-btn" onclick="sortBy('delay',this)">Delay</span>
+        <span class="sort-btn" onclick="sortBy('pax',this)">Passengers</span>
+      </div>
+      <div id="routes-list" style="display:flex;flex-direction:column;gap:5px;"><div style="color:var(--muted);font-size:11px;text-align:center;padding:24px">Loading...</div></div>
+    </div>
+    <div class="tab-content" id="tab-eda">
+      <div class="eda-box">
+        <div class="tl-label">24-Hour Event Timeline</div>
+        <div class="tl-track" id="tl-track"><div class="tl-cursor" id="tl-cursor" style="left:0%"></div></div>
+        <div class="tl-hours"><span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span><span>23</span></div>
+      </div>
+      <div class="eda-mini-row">
+        <div class="eda-mini"><div class="emv" id="e-events">0</div><div class="eml">Events</div></div>
+        <div class="eda-mini"><div class="emv" id="e-actions">0</div><div class="eml">Actions</div></div>
+        <div class="eda-mini"><div class="emv" id="e-msgs">0</div><div class="eml">Messages</div></div>
+      </div>
+      <div class="feed-hdr">Live Event Stream</div>
+      <div class="event-feed" id="event-feed"><div style="color:var(--muted);font-size:11px;text-align:center;padding:16px">Waiting for DSL events...</div></div>
+    </div>
+    <div class="tab-content" id="tab-dsl">
+      <div class="dsl-box">
+        <div class="sec-title">Add DSL Rule</div>
+        <div class="chips">
+          <span class="chip" onclick="fillRule('IF load > 85% ON route_2 BETWEEN 17:00 AND 19:00 THEN add_trip EVERY 10min')">Evening Rush</span>
+          <span class="chip" onclick="fillRule('IF delay > 8 ON route_1 THEN reroute TO route_6')">Reroute</span>
+          <span class="chip" onclick="fillRule('IF passengers < 5 ON route_7 BETWEEN 23:00 AND 05:00 THEN cancel_trip')">Night Cancel</span>
+          <span class="chip" onclick="fillRule('IF load > 90% AND headway > 15 ON route_3 THEN increase_capacity')">Capacity+</span>
+        </div>
+        <textarea id="rule-input" placeholder="IF load > 80% ON route_5 BETWEEN 08:00 AND 10:00 THEN add_trip EVERY 15min"></textarea>
+        <div class="btn-row">
+          <button class="btn btn-cyan" onclick="addRule()">+ Add Rule</button>
+          <button class="btn btn-ghost" onclick="showRules()">View All</button>
+        </div>
+        <div class="fb" id="rule-fb"></div>
+      </div>
+      <div class="dsl-box">
+        <div class="sec-title">AES-256-GCM Ticket</div>
+        <div style="display:flex;gap:5px">
+          <input id="pax-id" value="student_001" style="flex:1"/>
+          <select id="ticket-route" style="flex:0 0 auto;width:auto"><option>route_5</option><option>route_1</option><option>route_2</option><option>route_3</option></select>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-cyan" onclick="issueTicket()">Issue Ticket</button>
+          <button class="btn btn-red" onclick="tamperDemo()">Tamper Test</button>
+        </div>
+        <div class="ticket-out" id="ticket-out"><span style="color:var(--muted)">Issue a ticket to see AES-256-GCM output...</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="sched-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Schedule</span>
+      <span class="modal-close" onclick="closeModal()">&#x2715;</span>
+    </div>
+    <div class="modal-body" id="modal-body">Loading...</div>
+  </div>
+</div>
 <script>
 const API=window.location.origin;
 const RC={
@@ -339,8 +627,7 @@ async function loadStats(){try{const s=await fetch(`${API}/stats`).then(r=>r.jso
 async function poll(){try{const[routes,events]=await Promise.all([fetch(`${API}/routes`).then(r=>r.json()),fetch(`${API}/events?limit=40`).then(r=>r.json())]);updateMap(routes);renderRoutes(routes);renderEDA(events);document.getElementById("eda-dot").style.cssText="background:var(--green);box-shadow:0 0 8px var(--green)";document.getElementById("eda-status").textContent="EDA Live";}catch(e){document.getElementById("eda-dot").style.cssText="background:var(--red)";document.getElementById("eda-status").textContent="EDA Down";}}
 function fillRule(r){document.getElementById("rule-input").value=r;}
 async function addRule(){const rule=document.getElementById("rule-input").value.trim();if(!rule)return;const fb=document.getElementById("rule-fb");try{const r=await fetch(`${API}/rules`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({rule})});const d=await r.json();if(r.ok){fb.style.color="var(--green)";fb.textContent="✅ Rule #"+d.id+" added";document.getElementById("rule-input").value="";}else{fb.style.color="var(--red)";fb.textContent="❌ "+d.detail;}}catch(e){fb.style.color="var(--red)";fb.textContent="❌ "+e.message;}}
-async function showRules(){const rules=await fetch(`${API}/rules`).then(r=>r.json());const fb=document.getElementById("rule-fb");fb.style.color="var(--muted2)";fb.textContent=rules.map(r=>"#"+r.id+": "+r.rule).join("
-")||"No rules loaded";}
+async function showRules(){const rules=await fetch(`${API}/rules`).then(r=>r.json());const fb=document.getElementById("rule-fb");fb.style.color="var(--muted2)";fb.textContent=rules.map(r=>"#"+r.id+": "+r.rule).join(" | ")||"No rules loaded";}
 let lastToken="";
 async function issueTicket(){const el=document.getElementById("ticket-out");el.innerHTML='<span style="color:var(--muted)">Issuing...</span>';try{const r=await fetch(`${API}/ticket/issue`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({passenger_id:document.getElementById("pax-id").value,route:document.getElementById("ticket-route").value,fare:25.0})}).then(r=>r.json());lastToken=r.token;const v=await fetch(`${API}/ticket/verify`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:lastToken})}).then(r=>r.json());el.innerHTML=`<span class="key">ticket_id:</span> ${r.ticket_id}<br><span class="key">route:</span> ${r.route}<br><span class="key">fare:</span> ₹${r.fare}<br><span class="key">token:</span> ${r.token.substring(0,36)}...<br><span class="key">verify:</span> <span class="${v.valid?"ok":"err"}">${v.message}</span>`;}catch(e){el.innerHTML=`<span class="err">Error: ${e.message}</span>`;}}
 async function tamperDemo(){if(!lastToken){alert("Issue a ticket first!");return;}const el=document.getElementById("ticket-out");try{const r=await fetch(`${API}/ticket/tamper-demo`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:lastToken})}).then(r=>r.json());el.innerHTML=`<span class="key">tampered_token:</span> ${r.tampered_token}<br><span class="key">AES-GCM result:</span> <span class="err">${r.message}</span>`;}catch(e){el.innerHTML=`<span class="err">Error: ${e.message}</span>`;}}
