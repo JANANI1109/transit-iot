@@ -453,30 +453,37 @@ function renderRoutes(routes) {
   el.innerHTML = '';
   sorted.forEach(function(r) {
     var load=r.load_percent||0, delay=r.delay_minutes||0;
-    var color = RC[r.id]?RC[r.id].color:'#00d4ff';
-    var bc = load>80?'b-hi':load>60?'b-med':'b-ok';
-    var fc = load>80?'var(--red)':load>60?'var(--amber)':'var(--green)';
-    var dc = delay>10?'var(--red)':delay>3?'var(--amber)':'var(--green)';
+    var color = RC[r.id] ? RC[r.id].color : '#00d4ff';
+    var bc = load>80 ? 'b-hi' : load>60 ? 'b-med' : 'b-ok';
+    var fc = load>80 ? 'var(--red)' : load>60 ? 'var(--amber)' : 'var(--green)';
+    var dc = delay>10 ? 'var(--red)' : delay>3 ? 'var(--amber)' : 'var(--green)';
     var isSel = selectedRoute===r.id;
     var card = document.createElement('div');
-    card.className = 'route-card' + (isSel?' selected':'');
+    card.className = 'route-card' + (isSel ? ' selected' : '');
     card.dataset.rid = r.id;
     card.style.borderLeftColor = color;
-    card.innerHTML =
-      '<div class="rc-top"><span class="rc-id" style="color:'+color+'">'+r.id+'</span><span class="badge '+bc+'">'+load.toFixed(1)+'%</span></div>' +
-      '<div class="rc-name">'+(r.name||r.id)+'</div>' +
-      '<div class="rc-metrics">' +
-        '<div class="rc-metric"><div class="rc-mv" style="color:'+dc+'">'+delay.toFixed(1)+'</div><div class="rc-ml">delay min</div></div>' +
-        '<div class="rc-metric"><div class="rc-mv">'+(r.passengers||0)+'</div><div class="rc-ml">passengers</div></div>' +
-        '<div class="rc-metric"><div class="rc-mv">'+((r.speed_kmh||0).toFixed(0))+'</div><div class="rc-ml">km/h</div></div>' +
-      '</div>' +
-      '<div class="load-bar"><div class="load-fill" style="width:'+Math.min(load,100)+'%;background:'+fc+'"></div></div>' +
-      '<div class="rc-actions">' +
-        '<button class="rc-act focus" onclick="event.stopPropagation();selectRoute(''+r.id+'')">Focus</button>' +
-        '<button class="rc-act sim" onclick="event.stopPropagation();quickSim(''+r.id+'')">Simulate</button>' +
-        '<button class="rc-act sched" onclick="event.stopPropagation();showSchedule(''+r.id+'')">Schedule</button>' +
-      '</div>';
-    card.onclick = (function(rid){ return function(){ selectRoute(rid); }; })(r.id);
+    card.innerHTML = [
+      '<div class="rc-top">',
+        '<span class="rc-id" style="color:' + color + '">' + r.id + '</span>',
+        '<span class="badge ' + bc + '">' + load.toFixed(1) + '%</span>',
+      '</div>',
+      '<div class="rc-name">' + (r.name||r.id) + '</div>',
+      '<div class="rc-metrics">',
+        '<div class="rc-metric"><div class="rc-mv" style="color:' + dc + '">' + delay.toFixed(1) + '</div><div class="rc-ml">delay min</div></div>',
+        '<div class="rc-metric"><div class="rc-mv">' + (r.passengers||0) + '</div><div class="rc-ml">passengers</div></div>',
+        '<div class="rc-metric"><div class="rc-mv">' + (r.speed_kmh||0).toFixed(0) + '</div><div class="rc-ml">km/h</div></div>',
+      '</div>',
+      '<div class="load-bar"><div class="load-fill" style="width:' + Math.min(load,100) + '%;background:' + fc + '"></div></div>',
+      '<div class="rc-actions">',
+        '<button class="rc-act focus btn-focus">Focus</button>',
+        '<button class="rc-act sim btn-sim">Simulate</button>',
+        '<button class="rc-act sched btn-sched">Schedule</button>',
+      '</div>'
+    ].join('');
+    card.onclick = function() { selectRoute(r.id); };
+    card.querySelector('.btn-focus').onclick = function(e) { e.stopPropagation(); selectRoute(r.id); };
+    card.querySelector('.btn-sim').onclick = function(e) { e.stopPropagation(); quickSim(r.id); };
+    card.querySelector('.btn-sched').onclick = function(e) { e.stopPropagation(); showSchedule(r.id); };
     el.appendChild(card);
   });
 }
